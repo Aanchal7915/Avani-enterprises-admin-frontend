@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const res = await axios.post("http://localhost:5000/auth/login", { email, password });
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password });
             const { token, user } = res.data;
 
             localStorage.setItem("token", token);
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
     const signup = async (name, email, password, adminCode) => {
         try {
-            await axios.post("http://localhost:5000/auth/signup", { name, email, password, adminCode });
+            await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, { name, email, password, adminCode });
             return { success: true };
         } catch (err) {
             return { success: false, error: err.response?.data?.message || "Signup failed" };
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     const verifySignup = async (email, otp) => {
         try {
-            const res = await axios.post("http://localhost:5000/auth/verify-signup", { email, otp });
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/verify-signup`, { email, otp });
             const { token, user } = res.data;
             localStorage.setItem("token", token);
             setToken(token);
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 
     const forgotPassword = async (email) => {
         try {
-            const res = await axios.post("http://localhost:5000/auth/forgot-password", { email });
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email });
             return { success: true, message: res.data.message };
         } catch (err) {
             return { success: false, error: err.response?.data?.message || "Request failed" };
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
     const resetPassword = async (email, otp, newPassword) => {
         try {
-            const res = await axios.post("http://localhost:5000/auth/reset-password-otp", { email, otp, newPassword });
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password-otp`, { email, otp, newPassword });
             return { success: true, message: res.data.message };
         } catch (err) {
             return { success: false, error: err.response?.data?.message || "Reset failed" };

@@ -23,7 +23,7 @@ const Dashboard = () => {
 
     const fetchLeads = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/leads");
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/leads`);
             setLeads(res.data);
             setLoading(false);
         } catch (err) {
@@ -210,7 +210,7 @@ const Dashboard = () => {
                                                     <td className="px-6 py-4">
                                                         <div className="flex flex-wrap gap-1.5">
                                                             {Array.isArray(lead.services) &&
-                                                            lead.services.length > 0 ? (
+                                                                lead.services.length > 0 ? (
                                                                 lead.services.map((s, idx) => (
                                                                     <span
                                                                         key={idx}
@@ -298,7 +298,7 @@ const Dashboard = () => {
                                             </p>
                                             <div className="flex flex-wrap gap-1.5">
                                                 {Array.isArray(lead.services) &&
-                                                lead.services.length > 0 ? (
+                                                    lead.services.length > 0 ? (
                                                     lead.services.map((s, idx) => (
                                                         <span
                                                             key={idx}
