@@ -13,7 +13,7 @@ import {
   Menu,
 } from "lucide-react";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // 👈 UPDATED
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // ✅ mobile sidebar toggle
 
   const navigate = useNavigate();
+  const location = useLocation(); // 👈 NEW
 
   const months = [
     "All",
@@ -45,6 +46,11 @@ const Dashboard = () => {
   useEffect(() => {
     fetchLeads();
   }, []);
+
+  // 👇 NEW: jab bhi route change hoga, sidebar band kar do
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location]);
 
   const fetchLeads = async () => {
     try {
@@ -119,41 +125,27 @@ const Dashboard = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-pink-50">
       {/* ✅ Desktop Sidebar */}
-      <div className="hidden md:block">
+      
         <Sidebar />
-      </div>
+     
 
       {/* ✅ Mobile Sidebar Drawer */}
-      <div
-        className={clsx(
-          "fixed inset-0 z-40 md:hidden transition-transform duration-200",
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        {/* backdrop */}
-        <div
-          className="absolute inset-0 bg-black/40"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-        {/* drawer */}
-        <div className="relative h-full w-72 max-w-[80%] bg-white shadow-xl">
-          <Sidebar />
-        </div>
-      </div>
+      {/* ✅ Mobile Sidebar Drawer */}
+      
 
       {/* Top navbar ka offset */}
       <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-x-hidden mt-16 md:mt-0">
         <div className="max-w-6xl mx-auto space-y-6 pt-8 md:pt-4">
           {/* ✅ Mobile menu button */}
-          <div className="flex items-center justify-between md:hidden mb-3">
+          {/* <div className="flex items-center justify-between md:hidden mb-3">
             <button
               onClick={() => setIsSidebarOpen(true)}
               className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-200 bg-white/90 shadow-sm text-gray-700"
             >
-              <Menu size={18} className="mr-1" />
+              <Menu size={18} className="mr-1 bg-red-500" />
               <span className="text-sm">Menu</span>
             </button>
-          </div>
+          </div> */}
 
           {/* Top Header Area */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
