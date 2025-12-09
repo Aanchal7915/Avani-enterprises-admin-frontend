@@ -7,7 +7,7 @@ const Signup = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [adminCode, setAdminCode] = useState("");
+
     const [otp, setOtp] = useState("");
     const [step, setStep] = useState(1);
     const [error, setError] = useState("");
@@ -19,7 +19,7 @@ const Signup = () => {
         e.preventDefault();
         setError("");
         setLoading(true);
-        const res = await signup(name, email, password, adminCode);
+        const res = await signup(name, email, password);
         setLoading(false);
         if (res.success) setStep(2);
         else setError(res.error);
@@ -81,7 +81,6 @@ const Signup = () => {
                             { label: "Full Name", type: "text", value: name, set: setName, placeholder: "John Doe" },
                             { label: "Email Address", type: "email", value: email, set: setEmail, placeholder: "admin@example.com" },
                             { label: "Password", type: "password", value: password, set: setPassword, placeholder: "••••••••" },
-                            { label: "Admin Code", type: "password", value: adminCode, set: setAdminCode, placeholder: "Enter 8-digit code" },
                         ].map((field, i) => (
                             <div key={i}>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">

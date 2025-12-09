@@ -180,9 +180,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (name, email, password, adminCode) => {
+  const signup = async (name, email, password) => {
     try {
-      await axios.post("/auth/signup", { name, email, password, adminCode });
+      await axios.post("/auth/signup", { name, email, password });
       return { success: true };
     } catch (err) {
       return {

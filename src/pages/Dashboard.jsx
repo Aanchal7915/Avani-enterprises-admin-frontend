@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import Sidebar from "../components/Sidebar";
@@ -13,41 +13,26 @@ import {
   Menu,
 } from "lucide-react";
 import clsx from "clsx";
-import { useNavigate, useLocation } from "react-router-dom"; // 👈 UPDATED
+import { useNavigate, useLocation } from "react-router-dom";
+import AdvancedFilter from "../components/AdvancedFilter";
+import { filterLeads } from "../utils/filterLogic";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("All");
+  const [filters, setFilters] = useState({ dates: [], months: [], years: [] });
   const [searchTerm, setSearchTerm] = useState("");
-  const [leadStatus, setLeadStatus] = useState({}); // ✅ per-lead status
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // ✅ mobile sidebar toggle
+  const [leadStatus, setLeadStatus] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation(); // 👈 NEW
-
-  const months = [
-    "All",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const location = useLocation();
 
   useEffect(() => {
     fetchLeads();
   }, []);
 
-  // 👇 NEW: jab bhi route change hoga, sidebar band kar do
   useEffect(() => {
     setIsSidebarOpen(false);
   }, [location]);
@@ -71,19 +56,18 @@ const Dashboard = () => {
     }
   };
 
-  const filteredLeads = leads.filter((lead) => {
-    const date = new Date(lead.createdAt);
-    const monthName = date.toLocaleString("default", { month: "long" });
+  const filteredLeads = useMemo(() => {
+    const dateFiltered = filterLeads(leads, filters);
 
-    const matchesMonth = selectedMonth === "All" || monthName === selectedMonth;
-    const search = searchTerm.toLowerCase();
-    const matchesSearch =
-      lead.name?.toLowerCase().includes(search) ||
-      lead.email?.toLowerCase().includes(search) ||
-      lead.phone?.includes(searchTerm);
-
-    return matchesMonth && matchesSearch;
-  });
+    return dateFiltered.filter((lead) => {
+      const search = searchTerm.toLowerCase();
+      return (
+        lead.name?.toLowerCase().includes(search) ||
+        lead.email?.toLowerCase().includes(search) ||
+        lead.phone?.includes(searchTerm)
+      );
+    });
+  }, [leads, filters, searchTerm]);
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(
@@ -124,28 +108,10 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-pink-50">
-      {/* ✅ Desktop Sidebar */}
-      
-        <Sidebar />
-     
+      <Sidebar />
 
-      {/* ✅ Mobile Sidebar Drawer */}
-      {/* ✅ Mobile Sidebar Drawer */}
-      
-
-      {/* Top navbar ka offset */}
       <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-x-hidden mt-16 md:mt-0">
         <div className="max-w-6xl mx-auto space-y-6 pt-8 md:pt-4">
-          {/* ✅ Mobile menu button */}
-          {/* <div className="flex items-center justify-between md:hidden mb-3">
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-200 bg-white/90 shadow-sm text-gray-700"
-            >
-              <Menu size={18} className="mr-1 bg-red-500" />
-              <span className="text-sm">Menu</span>
-            </button>
-          </div> */}
 
           {/* Top Header Area */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -169,7 +135,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          {/* Quick Navigation (All / Contacted / Analytics) */}
+          {/* Quick Navigation */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <button
               onClick={() => navigate("/")}
@@ -220,7 +186,7 @@ const Dashboard = () => {
           </div>
 
           {/* Filters & Search */}
-          <div className="bg-white/80 backdrop-blur-xl p-4 md:p-5 rounded-2xl border border-indigo-50 shadow-sm">
+          <div className="bg-white/80 backdrop-blur-xl p-4 md:p-5 rounded-2xl border border-indigo-50 shadow-sm relative z-20">
             <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
               <div className="relative w-full md:w-96">
                 <Search
@@ -243,24 +209,11 @@ const Dashboard = () => {
                   <Filter size={14} className="mr-1" />
                   Filters
                 </span>
-                <div className="relative w-full md:w-52">
-                  <Calendar
-                    size={16}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                <div className="relative w-full md:w-auto min-w-[200px]">
+                  <AdvancedFilter
+                    onFilterChange={setFilters}
+                    initialFilters={filters}
                   />
-                  <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg 
-                      focus:outline-none focus:ring-2 focus:ring-indigo-400/30 
-                      focus:border-indigo-400 bg-white/90 text-sm"
-                  >
-                    {months.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
                 </div>
               </div>
             </div>
@@ -270,9 +223,9 @@ const Dashboard = () => {
               <span className="font-semibold text-gray-600">
                 {filteredLeads.length}
               </span>{" "}
-              lead{filteredLeads.length !== 1 && "s"} for{" "}
+              lead{filteredLeads.length !== 1 && "s"} based on{" "}
               <span className="font-medium text-indigo-500">
-                {selectedMonth === "All" ? "all months" : selectedMonth}
+                active filters
               </span>
               .
             </div>
@@ -330,7 +283,7 @@ const Dashboard = () => {
                           <td className="px-6 py-4">
                             <div className="flex flex-wrap gap-1.5">
                               {Array.isArray(lead.services) &&
-                              lead.services.length > 0 ? (
+                                lead.services.length > 0 ? (
                                 lead.services.map((s, idx2) => (
                                   <span
                                     key={idx2}
@@ -389,7 +342,7 @@ const Dashboard = () => {
                           colSpan={5}
                           className="px-6 py-12 text-center text-gray-500 text-sm"
                         >
-                          🌤️ No leads found for the current filters.
+                          🌤️ No records found for this period.
                         </td>
                       </tr>
                     )}
@@ -429,7 +382,7 @@ const Dashboard = () => {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {Array.isArray(lead.services) &&
-                        lead.services.length > 0 ? (
+                          lead.services.length > 0 ? (
                           lead.services.map((s, idx2) => (
                             <span
                               key={idx2}
@@ -477,7 +430,7 @@ const Dashboard = () => {
 
                 {filteredLeads.length === 0 && (
                   <div className="text-center text-gray-500 py-10 bg-white/80 border border-gray-100 rounded-2xl text-sm">
-                    No leads match your current filter.
+                    No records found for this period.
                   </div>
                 )}
               </div>

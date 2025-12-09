@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { Loader2 } from "lucide-react";
 
 const Login = () => {
+    const [adminCode, setAdminCode] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -14,9 +15,18 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+
+        const ENV_ADMIN_CODE = import.meta.env.VITE_ADMIN_CODE;
+
+        if (adminCode !== ENV_ADMIN_CODE) {
+            setError("Invalid admin code");
+            return;
+        }
+
         setLoading(true);
         const res = await login(email, password);
         setLoading(false);
+
         if (res.success) navigate("/");
         else setError(res.error);
     };
@@ -25,9 +35,9 @@ const Login = () => {
         <div className="min-h-screen flex items-center justify-center px-4
             bg-gradient-to-br from-indigo-200 via-blue-100 to-pink-200">
 
-            <div className="max-w-md w-full 
+            <div className="w-full max-w-lg sm:max-w-md
                 bg-gradient-to-br from-white via-blue-50/70 to-indigo-50/60
-                backdrop-blur-xl p-8 rounded-2xl
+                backdrop-blur-xl p-6 sm:p-8 rounded-2xl
                 shadow-[0_25px_70px_rgba(0,0,0,0.12)]
                 border border-white/60">
 
@@ -35,17 +45,17 @@ const Login = () => {
                     <img
                         src="/avani-logo.jpg"
                         alt="Avani Enterprises"
-                        className="w-24 h-24 mb-3 rounded-full shadow-lg"
+                        className="w-20 h-20 sm:w-24 sm:h-24 mb-3 rounded-full shadow-lg"
                     />
-                    <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
+                    <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
                         AVANI ENTERPRISES
                     </h1>
                 </div>
 
-                <h2 className="text-xl font-semibold text-center text-gray-900 mb-1">
-                    Welcome Back 
+                <h2 className="text-lg sm:text-xl font-semibold text-center text-gray-900 mb-1">
+                    Welcome Back
                 </h2>
-                <p className="text-center text-gray-600 mb-8">
+                <p className="text-center text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
                     Sign in to continue to your dashboard
                 </p>
 
@@ -55,7 +65,32 @@ const Login = () => {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+
+                    {/* Admin Code */}
+                    <div>
+                        <label className="text-sm font-medium text-gray-700 mb-1 block">
+                            Admin Code
+                        </label>
+                        <input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={8}
+                            required
+                            className="w-full px-4 py-2 sm:py-2.5 rounded-lg border border-gray-200
+                                bg-white/80
+                                focus:ring-2 focus:ring-indigo-400
+                                focus:border-transparent outline-none
+                                transition-all"
+                            placeholder="8 digit admin code"
+                            value={adminCode}
+                            onChange={(e) =>
+                                setAdminCode(e.target.value.replace(/\D/g, ""))
+                            }
+                        />
+                    </div>
+
+                    {/* Email */}
                     <div>
                         <label className="text-sm font-medium text-gray-700 mb-1 block">
                             Email Address
@@ -63,7 +98,7 @@ const Login = () => {
                         <input
                             type="email"
                             required
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200
+                            className="w-full px-4 py-2 sm:py-2.5 rounded-lg border border-gray-200
                                 bg-white/80
                                 focus:ring-2 focus:ring-indigo-400
                                 focus:border-transparent outline-none
@@ -74,6 +109,7 @@ const Login = () => {
                         />
                     </div>
 
+                    {/* Password */}
                     <div>
                         <div className="flex justify-between items-center mb-1">
                             <label className="text-sm font-medium text-gray-700">
@@ -89,7 +125,7 @@ const Login = () => {
                         <input
                             type="password"
                             required
-                            className="w-full px-4 py-2.5 rounded-lg border border-gray-200
+                            className="w-full px-4 py-2 sm:py-2.5 rounded-lg border border-gray-200
                                 bg-white/80
                                 focus:ring-2 focus:ring-indigo-400
                                 focus:border-transparent outline-none
@@ -103,7 +139,7 @@ const Login = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-2.5 rounded-lg font-semibold text-white
+                        className="w-full py-2 sm:py-2.5 rounded-lg font-semibold text-white
                             bg-gradient-to-r from-indigo-600 to-pink-500
                             hover:from-indigo-700 hover:to-pink-600
                             shadow-lg shadow-indigo-300/40
@@ -118,7 +154,7 @@ const Login = () => {
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-sm text-gray-600">
+                <p className="mt-5 sm:mt-6 text-center text-sm text-gray-600">
                     Don't have an account?{" "}
                     <Link
                         to="/signup"

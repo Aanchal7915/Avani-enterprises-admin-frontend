@@ -14,31 +14,17 @@ import {
   ArrowLeft, // back icon
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import AdvancedFilter from "../components/AdvancedFilter";
+import { filterLeads } from "../utils/filterLogic";
 
 const AnalyticsDashboard = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("All");
+  const [filters, setFilters] = useState({ dates: [], months: [], years: [] });
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
-
-  const months = [
-    "All",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
   useEffect(() => {
     fetchLeads();
@@ -56,24 +42,20 @@ const AnalyticsDashboard = () => {
   };
 
   // ---------- FILTERED LEADS (month + search) ----------
-  const filteredLeads = useMemo(
-    () =>
-      leads.filter((lead) => {
-        const date = new Date(lead.createdAt);
-        const monthName = date.toLocaleString("default", { month: "long" });
+  const filteredLeads = useMemo(() => {
+    // 1. Advanced Date/Month/Year Filtering
+    const dateFiltered = filterLeads(leads, filters);
 
-        const matchesMonth =
-          selectedMonth === "All" || monthName === selectedMonth;
-        const search = searchTerm.toLowerCase();
-        const matchesSearch =
-          lead.name?.toLowerCase().includes(search) ||
-          lead.email?.toLowerCase().includes(search) ||
-          lead.phone?.includes(searchTerm);
-
-        return matchesMonth && matchesSearch;
-      }),
-    [leads, selectedMonth, searchTerm]
-  );
+    // 2. Search
+    return dateFiltered.filter((lead) => {
+      const search = searchTerm.toLowerCase();
+      return (
+        lead.name?.toLowerCase().includes(search) ||
+        lead.email?.toLowerCase().includes(search) ||
+        lead.phone?.includes(searchTerm)
+      );
+    });
+  }, [leads, filters, searchTerm]);
 
   // ---------- CONTACTED / PENDING ----------
   const isContactedLead = (lead) => {
@@ -195,31 +177,31 @@ const AnalyticsDashboard = () => {
     unknown: "Unknown",
   };
 
- const statusData = useMemo(() => {
-  const map = {};
+  const statusData = useMemo(() => {
+    const map = {};
 
-  // ✅ Initialize all known statuses with 0 (so missing ones also show)
-  STATUS_VALUES.forEach((status) => {
-    map[status] = 0;
-  });
+    // ✅ Initialize all known statuses with 0 (so missing ones also show)
+    STATUS_VALUES.forEach((status) => {
+      map[status] = 0;
+    });
 
-  filteredLeads.forEach((lead) => {
-    let rawStatus = "";
+    filteredLeads.forEach((lead) => {
+      let rawStatus = "";
 
-    if (typeof lead.status === "string" && lead.status.trim() !== "") {
-      rawStatus = lead.status;
-    } else if (lead.contacted === true) {
-      rawStatus = "contacted";
-    }
+      if (typeof lead.status === "string" && lead.status.trim() !== "") {
+        rawStatus = lead.status;
+      } else if (lead.contacted === true) {
+        rawStatus = "contacted";
+      }
 
-    const normalized = rawStatus.trim().toLowerCase();
-    const key = STATUS_VALUES.includes(normalized) ? normalized : "unknown";
+      const normalized = rawStatus.trim().toLowerCase();
+      const key = STATUS_VALUES.includes(normalized) ? normalized : "unknown";
 
-    map[key] = (map[key] || 0) + 1;
-  });
+      map[key] = (map[key] || 0) + 1;
+    });
 
-  return Object.entries(map).sort((a, b) => b[1] - a[1]);
-}, [filteredLeads]);
+    return Object.entries(map).sort((a, b) => b[1] - a[1]);
+  }, [filteredLeads]);
 
 
   const totalStatusCount =
@@ -292,24 +274,11 @@ const AnalyticsDashboard = () => {
                   <Filter size={14} className="mr-1" />
                   Filters
                 </span>
-                <div className="relative w-full md:w-52">
-                  <Calendar
-                    size={16}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                <div className="relative w-full md:w-auto min-w-[200px]">
+                  <AdvancedFilter
+                    onFilterChange={setFilters}
+                    initialFilters={filters}
                   />
-                  <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-lg 
-                      focus:outline-none focus:ring-2 focus:ring-indigo-400/30 
-                      focus:border-indigo-400 bg-white/90 text-sm"
-                  >
-                    {months.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
                 </div>
               </div>
             </div>
@@ -317,7 +286,7 @@ const AnalyticsDashboard = () => {
             <div className="mt-3 text-xs text-gray-400">
               Showing analytics for{" "}
               <span className="font-medium text-indigo-500">
-                {selectedMonth === "All" ? "all months" : selectedMonth}
+                active filters
               </span>{" "}
               with{" "}
               <span className="font-semibold text-gray-600">
