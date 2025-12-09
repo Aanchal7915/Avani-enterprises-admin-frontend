@@ -8,6 +8,7 @@ import ContactedLeads from "./pages/ContactedLeads";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import { Loader2 } from "lucide-react";
 
+
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();

@@ -449,6 +449,7 @@ const Dashboard = () => {
                                 </option>
                                 <option value="interested">Interested</option>
                                 <option value="contacted">Contacted</option>
+                                <option value="converted">Converted</option>
                               </select>
                             </td>
                           </tr>
@@ -753,6 +754,7 @@ const Dashboard = () => {
                         </option>
                         <option value="interested">Interested</option>
                         <option value="contacted">Contacted</option>
+                        <option value="converted">Converted</option>
                       </select>
                     </div>
                   </div>
