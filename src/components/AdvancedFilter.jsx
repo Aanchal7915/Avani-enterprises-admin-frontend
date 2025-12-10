@@ -297,64 +297,70 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
 
             {/* Dropdown Panel */}
             {isOpen && (
-                <div className="absolute mt-2 w-[320px] sm:w-[360px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in slide-in-from-top-2 left-1/2 -translate-x-1/2 right-auto sm:left-auto sm:right-0 sm:translate-x-0">
-                    {/* Header Row: Tabs + Close Button */}
-                    <div className="flex items-center border-b border-gray-100 bg-gray-50/80 rounded-t-2xl">
-                        {/* Scrollable Tabs */}
-                        <div className="flex-1 flex overflow-x-auto no-scrollbar">
-                            {["dates", "months", "years", "custom"].map((tab) => (
-                                <button
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={clsx(
-                                        "flex-1 py-3.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider transition-all relative outline-none focus:outline-none whitespace-nowrap px-3",
-                                        activeTab === tab
-                                            ? "text-indigo-600 bg-white"
-                                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-100/50"
-                                    )}
-                                >
-                                    {tab === "dates" ? "Days" : tab === "custom" ? "Customize" : tab}
-                                    {activeTab === tab && (
-                                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full mx-auto w-1/2" />
-                                    )}
-                                </button>
-                            ))}
+                <>
+                    {/* Mobile Backdrop */}
+                    <div className="fixed inset-0 bg-black/20 backdrop-blur-[1px] z-[90] sm:hidden" onClick={() => setIsOpen(false)} />
+
+                    {/* Dropdown Panel - Fixed Center on Mobile, Absolute Right on Desktop */}
+                    <div className="fixed sm:absolute top-1/2 sm:top-full left-1/2 sm:left-auto sm:right-0 -translate-x-1/2 -translate-y-1/2 sm:translate-x-0 sm:translate-y-0 mt-0 sm:mt-2 w-[90vw] sm:w-[360px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in zoom-in-95 duration-200">
+                        {/* Header Row: Tabs + Close Button */}
+                        <div className="flex items-center border-b border-gray-100 bg-gray-50/80 rounded-t-2xl">
+                            {/* Scrollable Tabs */}
+                            <div className="flex-1 flex overflow-x-auto no-scrollbar">
+                                {["dates", "months", "years", "custom"].map((tab) => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setActiveTab(tab)}
+                                        className={clsx(
+                                            "flex-1 py-3.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider transition-all relative outline-none focus:outline-none whitespace-nowrap px-3",
+                                            activeTab === tab
+                                                ? "text-indigo-600 bg-white"
+                                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-100/50"
+                                        )}
+                                    >
+                                        {tab === "dates" ? "Days" : tab === "custom" ? "Customize" : tab}
+                                        {activeTab === tab && (
+                                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full mx-auto w-1/2" />
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Inline Close Button */}
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50/50 transition-colors border-l border-gray-200/50 shrink-0"
+                                title="Close"
+                            >
+                                <X size={18} />
+                            </button>
                         </div>
 
-                        {/* Inline Close Button */}
-                        <button
-                            onClick={() => setIsOpen(false)}
-                            className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50/50 transition-colors border-l border-gray-200/50 shrink-0"
-                            title="Close"
-                        >
-                            <X size={18} />
-                        </button>
-                    </div>
+                        {/* Content Body */}
+                        <div className="p-1 bg-white min-h-[250px]">
+                            {activeTab === "dates" && renderCalendar()}
+                            {activeTab === "months" && renderMonths()}
+                            {activeTab === "years" && renderYears()}
+                            {activeTab === "custom" && renderCustomRange()}
+                        </div>
 
-                    {/* Content Body */}
-                    <div className="p-1 bg-white min-h-[250px]">
-                        {activeTab === "dates" && renderCalendar()}
-                        {activeTab === "months" && renderMonths()}
-                        {activeTab === "years" && renderYears()}
-                        {activeTab === "custom" && renderCustomRange()}
+                        {/* Footer Actions */}
+                        <div className="p-3 border-t border-gray-100 bg-gray-50/50 flex items-center justify-between gap-3 rounded-b-2xl">
+                            <button
+                                onClick={clearFilters}
+                                className="px-4 py-2.5 text-xs font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-200/50 rounded-lg transition-colors"
+                            >
+                                Reset
+                            </button>
+                            <button
+                                onClick={applyFilters}
+                                className="flex-1 px-4 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-pink-500 hover:from-indigo-700 hover:to-pink-600 rounded-lg shadow-lg shadow-indigo-200 transition-all transform active:scale-95"
+                            >
+                                Apply Filters
+                            </button>
+                        </div>
                     </div>
-
-                    {/* Footer Actions */}
-                    <div className="p-3 border-t border-gray-100 bg-gray-50/50 flex items-center justify-between gap-3 rounded-b-2xl">
-                        <button
-                            onClick={clearFilters}
-                            className="px-4 py-2.5 text-xs font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-200/50 rounded-lg transition-colors"
-                        >
-                            Reset
-                        </button>
-                        <button
-                            onClick={applyFilters}
-                            className="flex-1 px-4 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-pink-500 hover:from-indigo-700 hover:to-pink-600 rounded-lg shadow-lg shadow-indigo-200 transition-all transform active:scale-95"
-                        >
-                            Apply Filters
-                        </button>
-                    </div>
-                </div>
+                </>
             )}
         </div>
     );
