@@ -89,6 +89,7 @@ const Dashboard = () => {
         Name: lead.name,
         Email: lead.email,
         Phone: lead.phone,
+        Location: lead.cityState || "N/A",
         Services: Array.isArray(lead.services)
           ? lead.services.join(", ")
           : lead.service,
@@ -347,6 +348,7 @@ const Dashboard = () => {
                     <tr>
                       <th className="px-6 py-3.5">Name</th>
                       <th className="px-6 py-3.5">Contact</th>
+                      <th className="px-6 py-3.5">Location</th>
                       <th className="px-6 py-3.5">Services</th>
                       <th className="px-6 py-3.5">Notes</th>
                       <th className="px-6 py-3.5">Date</th>
@@ -379,6 +381,11 @@ const Dashboard = () => {
                                   {lead.phone}
                                 </span>
                               </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm text-gray-700">
+                                {lead.cityState || "—"}
+                              </span>
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex flex-wrap gap-1.5">
@@ -457,7 +464,7 @@ const Dashboard = () => {
                           {/* Expanded Notes Panel */}
                           {expandedRow === lead._id && (
                             <tr>
-                              <td colSpan={6} className="px-0">
+                              <td colSpan={7} className="px-0">
                                 <div className="bg-indigo-50/30 p-4 border-b border-indigo-100 shadow-inner animate-in slide-in-from-top-2 duration-200">
                                   <div className="max-w-3xl mx-auto">
                                     <div className="flex justify-between items-center mb-3">
@@ -572,7 +579,7 @@ const Dashboard = () => {
                     ) : (
                       <tr>
                         <td
-                          colSpan={6}
+                          colSpan={7}
                           className="px-6 py-12 text-center text-gray-500 text-sm"
                         >
                           🌤️ No records found for this period.
@@ -612,6 +619,9 @@ const Dashboard = () => {
                       </p>
                       <p className="text-sm text-gray-700">
                         {lead.phone}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        {lead.cityState || "—"}
                       </p>
                     </div>
 
