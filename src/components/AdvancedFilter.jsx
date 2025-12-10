@@ -9,7 +9,7 @@ const MONTHS = [
 
 const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState("dates"); // dates | months | years
+    const [activeTab, setActiveTab] = useState("dates"); // dates | months | years | custom
     const [currentDate, setCurrentDate] = useState(new Date()); // For navigation
     const dropdownRef = useRef(null);
 
@@ -17,6 +17,7 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
     const [selectedDates, setSelectedDates] = useState(initialFilters?.dates || []);
     const [selectedMonths, setSelectedMonths] = useState(initialFilters?.months || []);
     const [selectedYears, setSelectedYears] = useState(initialFilters?.years || []);
+    const [customRange, setCustomRange] = useState(initialFilters?.customRange || { start: "", end: "" });
 
     // Sync internal state
     useEffect(() => {
@@ -24,6 +25,7 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
             setSelectedDates(initialFilters.dates || []);
             setSelectedMonths(initialFilters.months || []);
             setSelectedYears(initialFilters.years || []);
+            setCustomRange(initialFilters.customRange || { start: "", end: "" });
         }
     }, [initialFilters]);
 
@@ -63,11 +65,17 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
         );
     };
 
+    const handleCustomRangeChange = (e) => {
+        const { name, value } = e.target;
+        setCustomRange(prev => ({ ...prev, [name]: value }));
+    }
+
     const applyFilters = () => {
         onFilterChange({
             dates: selectedDates,
             months: selectedMonths,
-            years: selectedYears
+            years: selectedYears,
+            customRange: customRange
         });
         setIsOpen(false);
     };
@@ -76,7 +84,8 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
         setSelectedDates([]);
         setSelectedMonths([]);
         setSelectedYears([]);
-        onFilterChange({ dates: [], months: [], years: [] });
+        setCustomRange({ start: "", end: "" });
+        onFilterChange({ dates: [], months: [], years: [], customRange: { start: "", end: "" } });
         setIsOpen(false);
     };
 
@@ -191,9 +200,52 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
         );
     };
 
+    const renderCustomRange = () => (
+        <div className="p-5 animate-in fade-in zoom-in-95 duration-200 space-y-5">
+            <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 space-y-4">
+                {/* Header */}
+                <div className="flex items-center gap-2 mb-2">
+                    <div className="p-1.5 bg-indigo-100 rounded-md text-indigo-600">
+                        <CalendarIcon size={14} />
+                    </div>
+                    <span className="text-xs font-bold text-indigo-900">Select Date Range</span>
+                </div>
+
+                <div>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 block ml-1">From Date</label>
+                    <input
+                        type="date"
+                        name="start"
+                        value={customRange.start}
+                        onChange={handleCustomRangeChange}
+                        className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+                    />
+                </div>
+                <div>
+                    <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 block ml-1">To Date</label>
+                    <input
+                        type="date"
+                        name="end"
+                        value={customRange.end}
+                        onChange={handleCustomRangeChange}
+                        className="w-full text-sm border border-gray-200 rounded-xl px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+                    />
+                </div>
+            </div>
+            <p className="text-[10px] text-center text-gray-400">
+                Choose a start and end date to filter records.
+            </p>
+        </div>
+    );
+
     // Improved Summary Text
     const getSummary = () => {
         const parts = [];
+
+        // Custom Range Logic
+        if (customRange.start && customRange.end) {
+            return `${customRange.start} to ${customRange.end}`;
+        }
 
         // Years Logic
         if (selectedYears.length === 1) parts.push(`${selectedYears[0]}`);
@@ -216,7 +268,7 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
     };
 
     // Checking active filters count for the badge
-    const activeCount = selectedDates.length + selectedMonths.length + selectedYears.length;
+    const activeCount = selectedDates.length + selectedMonths.length + selectedYears.length + (customRange.start && customRange.end ? 1 : 0);
 
     return (
         <div className="relative" ref={dropdownRef}>
@@ -245,42 +297,46 @@ const AdvancedFilter = ({ onFilterChange, initialFilters }) => {
 
             {/* Dropdown Panel */}
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-[340px] sm:w-[360px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in slide-in-from-top-2">
-                    {/* Close Button (Absolute Top Right) */}
-                    <button
-                        onClick={() => setIsOpen(false)}
-                        className="absolute top-2 right-2 p-1.5 bg-white rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 z-50 shadow-sm border border-gray-100"
-                        title="Close"
-                    >
-                        <X size={14} />
-                    </button>
+                <div className="absolute mt-2 w-[320px] sm:w-[360px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[100] animate-in fade-in slide-in-from-top-2 left-1/2 -translate-x-1/2 right-auto sm:left-auto sm:right-0 sm:translate-x-0">
+                    {/* Header Row: Tabs + Close Button */}
+                    <div className="flex items-center border-b border-gray-100 bg-gray-50/80 rounded-t-2xl">
+                        {/* Scrollable Tabs */}
+                        <div className="flex-1 flex overflow-x-auto no-scrollbar">
+                            {["dates", "months", "years", "custom"].map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={clsx(
+                                        "flex-1 py-3.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider transition-all relative outline-none focus:outline-none whitespace-nowrap px-3",
+                                        activeTab === tab
+                                            ? "text-indigo-600 bg-white"
+                                            : "text-gray-500 hover:text-gray-700 hover:bg-gray-100/50"
+                                    )}
+                                >
+                                    {tab === "dates" ? "Days" : tab === "custom" ? "Customize" : tab}
+                                    {activeTab === tab && (
+                                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full mx-auto w-1/2" />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
 
-                    {/* Header Tabs */}
-                    <div className="flex border-b border-gray-100 bg-gray-50/80 rounded-t-2xl pr-8">
-                        {["dates", "months", "years"].map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab)}
-                                className={clsx(
-                                    "flex-1 py-3 text-xs font-semibold uppercase tracking-wider transition-all relative outline-none focus:outline-none",
-                                    activeTab === tab
-                                        ? "text-indigo-600 bg-white"
-                                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-100/50"
-                                )}
-                            >
-                                {tab === "dates" ? "Day Wise" : tab}
-                                {activeTab === tab && (
-                                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full mx-6" />
-                                )}
-                            </button>
-                        ))}
+                        {/* Inline Close Button */}
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="p-3 text-gray-400 hover:text-red-500 hover:bg-red-50/50 transition-colors border-l border-gray-200/50 shrink-0"
+                            title="Close"
+                        >
+                            <X size={18} />
+                        </button>
                     </div>
 
                     {/* Content Body */}
-                    <div className="p-1 bg-white">
+                    <div className="p-1 bg-white min-h-[250px]">
                         {activeTab === "dates" && renderCalendar()}
                         {activeTab === "months" && renderMonths()}
                         {activeTab === "years" && renderYears()}
+                        {activeTab === "custom" && renderCustomRange()}
                     </div>
 
                     {/* Footer Actions */}

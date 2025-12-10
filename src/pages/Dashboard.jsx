@@ -30,7 +30,7 @@ const Dashboard = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [filters, setFilters] = useState({ dates: [], months: [], years: [] });
+  const [filters, setFilters] = useState({ dates: [], months: [], years: [], customRange: { start: "", end: "" } });
   const [searchTerm, setSearchTerm] = useState("");
   const [leadStatus, setLeadStatus] = useState({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
