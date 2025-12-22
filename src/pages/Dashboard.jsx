@@ -282,7 +282,24 @@ const Dashboard = () => {
               </div>
               <BarChart3 size={24} />
             </button>
+            
+            <button
+              onClick={() => navigate("/avani-forms")}
+              className="flex items-center justify-between p-4 rounded-2xl bg-white/90 border border-gray-100 shadow-sm hover:shadow-md transition"
+            >
+              <div className="text-left">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  Contact Submissions
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">
+                  View all contact form submissions
+                </p>
+              </div>
+              <MessageSquare size={24} className="text-indigo-500" />
+            </button>
           </div>
+
+       
 
           {/* Filters & Search */}
           <div className="bg-white/80 backdrop-blur-xl p-4 md:p-5 rounded-2xl border border-indigo-50 shadow-sm relative z-20">

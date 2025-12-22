@@ -6,6 +6,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import ContactedLeads from "./pages/ContactedLeads";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import AvaniFormDetail from "./pages/AvaniFormDetail";
+import AvaniFormsPage from "./pages/AvaniFormsPage";
 import { Loader2 } from "lucide-react";
 
 
@@ -94,6 +96,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <AnalyticsDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/avani-forms/:id"
+            element={
+              <ProtectedRoute>
+                <AvaniFormDetail />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/avani-forms"
+            element={
+              <ProtectedRoute>
+                <AvaniFormsPage />
               </ProtectedRoute>
             }
           />
