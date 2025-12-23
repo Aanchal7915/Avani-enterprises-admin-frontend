@@ -361,9 +361,7 @@ const AvaniFormsPage = () => {
     return forms.filter((f) =>
       (f.fullName || "").toLowerCase().includes(q) ||
       (f.email || "").toLowerCase().includes(q) ||
-      (f.phoneNu || "").toLowerCase().includes(q) ||
-      (Array.isArray(f.service) ? f.service.join(", ") : f.service || "").toLowerCase().includes(q) ||
-      (f.companyName || "").toLowerCase().includes(q)
+      (f.phoneNu || "").toLowerCase().includes(q)
     );
   }, [forms, search]);
 
@@ -506,7 +504,7 @@ const AvaniFormsPage = () => {
               />
               <input
                 type="text"
-                placeholder="Search by name, email, phone or service"
+                placeholder="Search by name, email, phone..."
                 className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg 
                   focus:outline-none focus:ring-2 focus:ring-indigo-400/30 
                   focus:border-indigo-400 bg-white/90 text-sm"
@@ -564,12 +562,6 @@ const AvaniFormsPage = () => {
                         <Phone size={14} className="mt-1 shrink-0" />
                         {f.phoneNu || "—"}
                       </div>
-                      {f.companyName && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Layout size={14} />
-                          {f.companyName}
-                        </div>
-                      )}
                     </div>
 
                     <button
@@ -601,7 +593,6 @@ const AvaniFormsPage = () => {
                       <th className="px-6 py-4 text-left">Name</th>
                       <th className="px-6 py-4 text-left">Email</th>
                       <th className="px-6 py-4 text-left">Phone</th>
-                      <th className="px-6 py-4 text-left">Company</th>
                       <th className="px-6 py-4 text-left">Date</th>
                     </tr>
                   </thead>
@@ -611,7 +602,6 @@ const AvaniFormsPage = () => {
                         <td className="px-6 py-4">{f.fullName}</td>
                         <td className="px-6 py-4">{f.email}</td>
                         <td className="px-6 py-4">{f.phoneNu}</td>
-                        <td className="px-6 py-4">{f.companyName}</td>
                         <td className="px-6 py-4 text-xs text-gray-500">
                           {f.createdAt
                             ? new Date(f.createdAt).toLocaleString()
