@@ -54,7 +54,7 @@ const AvaniFormsPage = () => {
     return forms.filter((f) =>
       (f.fullName || "").toLowerCase().includes(q) ||
       (f.email || "").toLowerCase().includes(q) ||
-      (f.phoneNu || "").toLowerCase().includes(q)
+      (f.phoneNu || "").toLowerCase().includes(q)...
       
     );
   }, [forms, search]);
