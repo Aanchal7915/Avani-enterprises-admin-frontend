@@ -506,7 +506,7 @@ const AvaniFormsPage = () => {
               />
               <input
                 type="text"
-                placeholder="Search by name, email, phone or service..."
+                placeholder="Search by name, email, phone..."
                 className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg 
                   focus:outline-none focus:ring-2 focus:ring-indigo-400/30 
                   focus:border-indigo-400 bg-white/90 text-sm"
@@ -556,13 +556,13 @@ const AvaniFormsPage = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Mail size={14} />
-                        {f.email || "—"}
+                      <div className="flex items-center gap-2 text-sm overflow-hidden">
+                        <Mail size={14} className="shrink-0" />
+                        <span className="truncate">{f.email || "—"}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Phone size={14} />
-                        {f.phoneNu || "—"}
+                      <div className="flex items-center gap-2 text-sm overflow-hidden">
+                        <Phone size={14} className="shrink-0" />
+                        <span className="truncate">{f.phoneNu || "—"}</span>
                       </div>
                       {f.companyName && (
                         <div className="flex items-center gap-2 text-sm">

@@ -282,7 +282,7 @@ const Dashboard = () => {
               </div>
               <BarChart3 size={24} />
             </button>
-            
+
             <button
               onClick={() => navigate("/avani-forms")}
               className="flex items-center justify-between p-4 rounded-2xl bg-white/90 border border-gray-100 shadow-sm hover:shadow-md transition"
@@ -299,7 +299,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-       
+
 
           {/* Filters & Search */}
           <div className="bg-white/80 backdrop-blur-xl p-4 md:p-5 rounded-2xl border border-indigo-50 shadow-sm relative z-20">
@@ -627,17 +627,17 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-1">
+                    <div className="space-y-1 overflow-hidden">
                       <p className="text-xs text-gray-500 font-medium">
                         Contact
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-gray-700 truncate">
                         {lead.email}
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-gray-700 truncate">
                         {lead.phone}
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-gray-700 truncate">
                         {lead.cityState || "—"}
                       </p>
                     </div>
