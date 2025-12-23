@@ -317,6 +317,10 @@ import {
   ChevronDown,
   ChevronUp,
   StickyNote,
+  Users,
+  PhoneCall,
+  BarChart3,
+  MessageSquare,
   Mail,
   Phone,
   Layout
@@ -358,10 +362,7 @@ const AvaniFormsPage = () => {
       (f.fullName || "").toLowerCase().includes(q) ||
       (f.email || "").toLowerCase().includes(q) ||
       (f.phoneNu || "").toLowerCase().includes(q) ||
-      (Array.isArray(f.service)
-        ? f.service.join(", ")
-        : f.service || ""
-      ).toLowerCase().includes(q) ||
+      (Array.isArray(f.service) ? f.service.join(", ") : f.service || "").toLowerCase().includes(q) ||
       (f.companyName || "").toLowerCase().includes(q)
     );
   }, [forms, search]);
@@ -399,73 +400,125 @@ const AvaniFormsPage = () => {
       <Sidebar />
 
       <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-x-hidden mt-16 md:mt-0">
-        <div className="max-w-7xl mx-auto space-y-6 pt-6">
+        <div className="max-w-6xl mx-auto space-y-6 pt-8 md:pt-4">
 
-          {/* HEADER */}
-          <div className="space-y-3">
-            <button
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center text-xs px-3 py-1.5 rounded-lg border bg-white shadow-sm text-gray-600"
-            >
-              <ArrowLeft size={14} className="mr-1.5" />
-              Back
-            </button>
-
-            <div>
-              <h1 className="text-xl md:text-3xl font-bold text-gray-900">
-                Submissions
-              </h1>
-              <p className="hidden md:block text-gray-500 text-sm">
-                Website contact forms
-              </p>
+          {/* TOP HEADER */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="space-y-3">
+              <button
+                onClick={() => navigate(-1)}
+                className="inline-flex items-center text-xs px-3 py-1.5 rounded-lg border bg-white shadow-sm text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                <ArrowLeft size={14} className="mr-1.5" />
+                Back
+              </button>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
+                  Contact Submissions
+                </h1>
+                <p className="text-gray-500 mt-1 text-sm md:text-base">
+                  Manage and track all contact form inquiries from Avani Enterprises website. Review project details and export data seamlessly.
+                </p>
+              </div>
             </div>
+
+            <button
+              onClick={exportExcel}
+              className="inline-flex items-center bg-gradient-to-r from-indigo-600 to-pink-500 
+                text-white px-5 py-2.5 rounded-lg hover:from-indigo-700 hover:to-pink-600 
+                transition-all shadow-md active:scale-95 text-sm md:text-base font-semibold"
+            >
+              <Download size={18} className="mr-2" />
+              Export to Excel
+            </button>
           </div>
 
-          {/* 🔥 EXPORT + SEARCH (SAME CARD) */}
-          <div className="bg-white p-4 rounded-xl border shadow-sm space-y-4">
+          {/* Quick Navigation */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center justify-between p-4 rounded-2xl bg-white/90 border border-gray-100 shadow-sm hover:shadow-md transition"
+            >
+              <div className="text-left">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  All Leads
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">
+                  View & manage all incoming leads
+                </p>
+              </div>
+              <Users size={24} className="text-indigo-500" />
+            </button>
 
-            {/* EXPORT BUTTON */}
-            <div className="flex w-full justify-end pr-2 md:pr-0">
-              <button
-                onClick={exportExcel}
-                className="
-                  inline-flex items-center justify-center
-                  gap-1.5 md:gap-2
-                  bg-gradient-to-r from-indigo-600 to-pink-500
-                  text-white
-                  px-3 py-2 md:px-4 md:py-2.5
-                  rounded-lg md:rounded-xl
-                  font-semibold md:font-bold
-                  text-xs md:text-base
-                  shadow-md
-                  hover:from-indigo-700 hover:to-pink-600
-                  active:scale-95
-                  transition-all
-                "
-              >
-                <Download size={14} className="md:size-[18px]" />
-                <span className="md:hidden">Export</span>
-                <span className="hidden md:inline">Export to Excel</span>
-              </button>
+            <button
+              onClick={() => navigate("/contacted-leads")}
+              className="flex items-center justify-between p-4 rounded-2xl bg-white/90 border border-gray-100 shadow-sm hover:shadow-md transition"
+            >
+              <div className="text-left">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  Contacted Leads
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">
+                  Leads that have been followed up
+                </p>
+              </div>
+              <PhoneCall size={24} className="text-teal-500" />
+            </button>
+
+            <button
+              onClick={() => navigate("/analytics")}
+              className="flex items-center justify-between p-4 rounded-2xl bg-white/90 border border-gray-100 shadow-sm hover:shadow-md transition"
+            >
+              <div className="text-left">
+                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                  Analytics
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">
+                  See stats & performance
+                </p>
+              </div>
+              <BarChart3 size={24} className="text-pink-500" />
+            </button>
+
+            <button
+              onClick={() => navigate("/avani-forms")}
+              className="flex items-center justify-between p-4 rounded-2xl 
+                bg-gradient-to-br from-indigo-600 to-pink-500 text-white shadow-sm hover:shadow-md transition"
+            >
+              <div className="text-left">
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-white">
+                  Submissions
+                </h3>
+                <p className="text-xs text-white/80 mt-1">
+                  Website contact forms
+                </p>
+              </div>
+              <MessageSquare size={24} className="text-white" />
+            </button>
+          </div>
+
+          {/* Search Bar */}
+          <div className="bg-white/80 backdrop-blur-xl p-4 md:p-5 rounded-2xl border border-indigo-50 shadow-sm">
+            <div className="relative w-full md:w-96">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+              <input
+                type="text"
+                placeholder="Search by name, email, phone or service..."
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg 
+                  focus:outline-none focus:ring-2 focus:ring-indigo-400/30 
+                  focus:border-indigo-400 bg-white/90 text-sm"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
 
-            {/* SEARCH BAR */}
-            <div className="flex flex-col md:flex-row gap-3 md:items-center">
-              <div className="relative w-full md:w-96">
-                <Search
-                  size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                />
-                <input
-                  placeholder="Search..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 border rounded-lg text-sm"
-                />
-              </div>
-              <span className="text-xs text-gray-400">
-                {filtered.length} results
-              </span>
+            <div className="mt-3 text-xs text-gray-400">
+              Showing{" "}
+              <span className="font-semibold text-gray-600">{filtered.length}</span>{" "}
+              submission{filtered.length !== 1 && "s"}.
             </div>
           </div>
 
