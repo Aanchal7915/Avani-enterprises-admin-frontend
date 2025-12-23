@@ -105,37 +105,30 @@ const ContactedLeads = () => {
       {/* same navbar offset fix */}
       <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-x-hidden mt-16 md:mt-0">
         <div className="max-w-6xl mx-auto space-y-6 pt-8 md:pt-4">
-          {/* Back Button */}
-          <div className="mb-2">
+          {/* Header Area */}
+          <div className="flex flex-col gap-4">
             <button
               onClick={() => navigate(-1)}
-              className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 bg-white/70 shadow-sm"
+              className="inline-flex items-center text-[10px] md:text-sm px-2 py-1.5 rounded-lg border border-gray-200 bg-white/80 hover:bg-gray-50 shadow-sm transition self-start font-medium text-gray-600"
             >
-              <ArrowLeft size={16} className="mr-1" />
+              <ArrowLeft size={14} className="mr-1" />
               Back
             </button>
-          </div>
 
-          {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                Contacted Leads
-              </h1>
-              <p className="text-gray-500 mt-1 text-sm md:text-base">
-                All leads that have been contacted or followed up.
-              </p>
+            <div className="flex flex-row justify-between items-center gap-2">
+              <div>
+                <h1 className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight">Contacted</h1>
+                <p className="hidden xs:block text-gray-500 text-[10px] md:text-base">Followed up leads list.</p>
+              </div>
+
+              <button
+                onClick={downloadExcel}
+                className="inline-flex items-center justify-center bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-3 py-2 rounded-lg hover:from-indigo-700 hover:to-pink-600 transition-all shadow-md active:scale-95 text-[11px] font-bold"
+              >
+                <Download size={14} className="mr-1.5" />
+                Export
+              </button>
             </div>
-
-            <button
-              onClick={downloadExcel}
-              className="inline-flex items-center bg-gradient-to-r from-indigo-600 to-pink-500 
-                text-white px-5 py-2.5 rounded-lg hover:from-indigo-700 hover:to-pink-600 
-                transition-all shadow-md active:scale-95 text-sm md:text-base"
-            >
-              <Download size={18} className="mr-2" />
-              Export Contacted to Excel
-            </button>
           </div>
 
           {/* Filters & Search */}
@@ -253,7 +246,7 @@ const ContactedLeads = () => {
                           <td className="px-6 py-4">
                             <div className="flex flex-wrap gap-1.5">
                               {Array.isArray(lead.services) &&
-                              lead.services.length > 0 ? (
+                                lead.services.length > 0 ? (
                                 lead.services.map((s, idx) => (
                                   <span
                                     key={idx}
@@ -340,7 +333,7 @@ const ContactedLeads = () => {
                       </p>
                       <div className="flex flex-wrap gap-1.5">
                         {Array.isArray(lead.services) &&
-                        lead.services.length > 0 ? (
+                          lead.services.length > 0 ? (
                           lead.services.map((s, idx) => (
                             <span
                               key={idx}

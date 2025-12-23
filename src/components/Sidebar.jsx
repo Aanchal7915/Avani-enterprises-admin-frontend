@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, User } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, User, MessageSquare } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import clsx from "clsx";
 
@@ -65,7 +65,7 @@ const Sidebar = () => {
                     {/* Navigation */}
                     <nav className="flex-1 px-4 py-6">
                         <NavItem to="/" icon={LayoutDashboard} label="Leads Dashboard" />
-                        {/* Add more links here if needed */}
+                        <NavItem to="/avani-forms" icon={MessageSquare} label="Contact Submissions" />
                     </nav>
 
                     {/* User & Logout */}
