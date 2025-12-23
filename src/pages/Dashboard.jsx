@@ -627,17 +627,17 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-1 overflow-hidden">
+                    <div className="space-y-1">
                       <p className="text-xs text-gray-500 font-medium">
                         Contact
                       </p>
-                      <p className="text-sm text-gray-700 truncate">
+                      <p className="text-sm text-gray-700">
                         {lead.email}
                       </p>
-                      <p className="text-sm text-gray-700 truncate">
+                      <p className="text-sm text-gray-700">
                         {lead.phone}
                       </p>
-                      <p className="text-sm text-gray-700 truncate">
+                      <p className="text-sm text-gray-700">
                         {lead.cityState || "—"}
                       </p>
                     </div>
