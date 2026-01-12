@@ -8,6 +8,12 @@ import ContactedLeads from "./pages/ContactedLeads";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import AvaniFormDetail from "./pages/AvaniFormDetail";
 import AvaniFormsPage from "./pages/AvaniFormsPage";
+import JobManagement from "./pages/JobManagement";
+import ApplicationManagement from "./pages/ApplicationManagement";
+import JobAnalytics from "./pages/JobAnalytics";
+import JobsDashboard from "./pages/JobsDashboard";
+import CareerPage from "./pages/CareerPage";
+import JobDetail from "./pages/JobDetail";
 import { Loader2 } from "lucide-react";
 
 
@@ -72,6 +78,10 @@ function App() {
             }
           />
 
+          {/* Public Career Pages */}
+          <Route path="/careers" element={<CareerPage />} />
+          <Route path="/careers/:id" element={<JobDetail />} />
+
           {/* Protected App Routes */}
           <Route
             path="/"
@@ -114,6 +124,43 @@ function App() {
             element={
               <ProtectedRoute>
                 <AvaniFormsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Job Management Routes */}
+          <Route
+            path="/jobs-dashboard"
+            element={
+              <ProtectedRoute>
+                <JobsDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/jobs"
+            element={
+              <ProtectedRoute>
+                <JobManagement />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/applications"
+            element={
+              <ProtectedRoute>
+                <ApplicationManagement />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/job-analytics"
+            element={
+              <ProtectedRoute>
+                <JobAnalytics />
               </ProtectedRoute>
             }
           />

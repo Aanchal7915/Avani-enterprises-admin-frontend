@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, User, MessageSquare } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, User, MessageSquare, Briefcase, FileText, BarChart3 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import clsx from "clsx";
 
@@ -50,7 +50,7 @@ const Sidebar = () => {
 
             {/* Sidebar Container */}
             <div className={clsx(
-                "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out md:translate-x-0",
+                "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out md:translate-x-0 overflow-y-auto",
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
                 <div className="flex flex-col h-full">
@@ -64,8 +64,32 @@ const Sidebar = () => {
 
                     {/* Navigation */}
                     <nav className="flex-1 px-4 py-6">
-                        <NavItem to="/" icon={LayoutDashboard} label="Leads Dashboard" />
-                        <NavItem to="/avani-forms" icon={MessageSquare} label="Contact Submissions" />
+                        <div className="mb-4">
+                            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Leads</p>
+                            <NavItem to="/" icon={LayoutDashboard} label="Leads Dashboard" />
+                            <NavItem to="/avani-forms" icon={MessageSquare} label="Contact Submissions" />
+                        </div>
+
+                        <div className="mb-4">
+                            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Careers</p>
+                            <NavItem to="/jobs-dashboard" icon={BarChart3} label="Jobs Dashboard" />
+                            <NavItem to="/jobs" icon={Briefcase} label="Job Management" />
+                            <NavItem to="/applications" icon={FileText} label="Applications" />
+                        </div>
+
+                        <div>
+                            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Public Pages</p>
+                            <a
+                                href="/careers"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors mb-1 text-gray-600 hover:bg-gray-100"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                <Briefcase size={20} />
+                                <span className="font-medium">View Career Page</span>
+                            </a>
+                        </div>
                     </nav>
 
                     {/* User & Logout */}

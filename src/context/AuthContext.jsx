@@ -115,17 +115,24 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(
     () => JSON.parse(localStorage.getItem("user") || "null")
   );
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem("token");
+    console.log("🔐 AuthContext initialized with token:", storedToken ? "EXISTS" : "MISSING");
+    return storedToken;
+  });
   const [loading, setLoading] = useState(true);
 
   // ✅ 2. Token change hote hi axios ke headers update karo
   useEffect(() => {
+    console.log("🔄 Token changed:", token ? "Setting header" : "Removing header");
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       localStorage.setItem("token", token);
+      console.log("✅ Authorization header set");
     } else {
       delete axios.defaults.headers.common["Authorization"];
       localStorage.removeItem("token");
+      console.log("❌ Authorization header removed");
     }
   }, [token]);
 

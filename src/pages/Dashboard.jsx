@@ -20,9 +20,12 @@ import {
   Save,
   ChevronDown,
   ChevronUp,
+  Briefcase,
+  FileText,
 } from "lucide-react";
 import clsx from "clsx";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import AdvancedFilter from "../components/AdvancedFilter";
 import { filterLeads } from "../utils/filterLogic";
 
@@ -42,10 +45,14 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { token, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    fetchLeads();
-  }, []);
+    // Only fetch leads when auth is ready and token exists
+    if (!authLoading && token) {
+      fetchLeads();
+    }
+  }, [authLoading, token]);
 
   useEffect(() => {
     setIsSidebarOpen(false);
@@ -53,6 +60,7 @@ const Dashboard = () => {
 
   const fetchLeads = async () => {
     try {
+      console.log("🔍 Fetching leads with token:", token ? "Token exists" : "No token");
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/leads`);
       const data = res.data || [];
       setLeads(data);
@@ -64,8 +72,12 @@ const Dashboard = () => {
       setLeadStatus(initialStatuses);
 
       setLoading(false);
+      console.log("✅ Leads fetched successfully:", data.length);
     } catch (err) {
-      setError("Failed to fetch leads");
+      console.error("❌ Error fetching leads:", err.response?.data || err.message);
+      console.error("Status:", err.response?.status);
+      console.error("Headers sent:", err.config?.headers);
+      setError(err.response?.data?.message || "Failed to fetch leads");
       setLoading(false);
     }
   };
@@ -235,7 +247,7 @@ const Dashboard = () => {
           </div>
 
           {/* Quick Navigation */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <button
               onClick={() => navigate("/")}
               className="flex items-center justify-between p-4 rounded-2xl bg-white/90 border border-gray-100 shadow-sm hover:shadow-md transition"
@@ -298,8 +310,6 @@ const Dashboard = () => {
               <MessageSquare size={24} className="text-indigo-500" />
             </button>
           </div>
-
-
 
           {/* Filters & Search */}
           <div className="bg-white/80 backdrop-blur-xl p-4 md:p-5 rounded-2xl border border-indigo-50 shadow-sm relative z-20">

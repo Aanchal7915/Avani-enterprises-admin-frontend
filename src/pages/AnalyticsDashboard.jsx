@@ -14,6 +14,7 @@ import {
   ArrowLeft, // back icon
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import AdvancedFilter from "../components/AdvancedFilter";
 import { filterLeads } from "../utils/filterLogic";
 
@@ -27,10 +28,13 @@ const AnalyticsDashboard = () => {
   const [selectedConversionPeriod, setSelectedConversionPeriod] = useState("monthly");
 
   const navigate = useNavigate();
+  const { token, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    fetchLeads();
-  }, []);
+    if (!authLoading && token) {
+      fetchLeads();
+    }
+  }, [authLoading, token]);
 
   const fetchLeads = async () => {
     try {

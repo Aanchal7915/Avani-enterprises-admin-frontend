@@ -5,6 +5,7 @@ import { Download, Calendar, Search, Filter, PhoneCall, ArrowLeft } from "lucide
 import clsx from "clsx";
 import * as XLSX from "xlsx";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const ContactedLeads = () => {
   const [leads, setLeads] = useState([]);
@@ -14,6 +15,7 @@ const ContactedLeads = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
+  const { token, loading: authLoading } = useAuth();
 
   const months = [
     "All",
@@ -32,8 +34,10 @@ const ContactedLeads = () => {
   ];
 
   useEffect(() => {
-    fetchLeads();
-  }, []);
+    if (!authLoading && token) {
+      fetchLeads();
+    }
+  }, [authLoading, token]);
 
   const fetchLeads = async () => {
     try {
