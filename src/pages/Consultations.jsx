@@ -3,10 +3,10 @@ import { Calendar, Mail, Phone, Building2, Briefcase, MessageSquare, Tag, Eye, S
 import axios from "axios";
 import clsx from "clsx";
 
-const AvaniFormsPage = () => {
-  const [forms, setForms] = useState([]);
+const Consultations = () => {
+  const [consultations, setConsultations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedForm, setSelectedForm] = useState(null);
+  const [selectedConsultation, setSelectedConsultation] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [expandedRow, setExpandedRow] = useState(null);
   const [noteInput, setNoteInput] = useState("");
@@ -15,31 +15,31 @@ const AvaniFormsPage = () => {
   const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000";
 
   useEffect(() => {
-    fetchForms();
+    fetchConsultations();
   }, []);
 
-  const fetchForms = async () => {
+  const fetchConsultations = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`${API_BASE}/avani-form`);
       if (response.data.success) {
-        setForms(response.data.data || []);
+        setConsultations(response.data.data || []);
       }
     } catch (error) {
-      console.error("Error fetching forms:", error);
+      console.error("Error fetching consultations:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const openModal = (form) => {
-    setSelectedForm(form);
+  const openModal = (consultation) => {
+    setSelectedConsultation(consultation);
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
-    setSelectedForm(null);
+    setSelectedConsultation(null);
   };
 
   const toggleNotes = (id) => {
@@ -67,8 +67,8 @@ const AvaniFormsPage = () => {
         notes: updatedNotes,
       });
 
-      setForms((prev) =>
-        prev.map((f) => (f._id === id ? { ...f, notes: updatedNotes } : f))
+      setConsultations((prev) =>
+        prev.map((c) => (c._id === id ? { ...c, notes: updatedNotes } : c))
       );
       setNoteInput("");
     } catch (error) {
@@ -82,8 +82,8 @@ const AvaniFormsPage = () => {
         notes: newNotesString,
       });
 
-      setForms((prev) =>
-        prev.map((f) => (f._id === id ? { ...f, notes: newNotesString } : f))
+      setConsultations((prev) =>
+        prev.map((c) => (c._id === id ? { ...c, notes: newNotesString } : c))
       );
       return true;
     } catch (error) {
@@ -92,28 +92,28 @@ const AvaniFormsPage = () => {
     }
   };
 
-  const handleDeleteNote = async (formId, noteIndex, currentNotes) => {
+  const handleDeleteNote = async (consultationId, noteIndex, currentNotes) => {
     if (!confirm("Are you sure you want to delete this note?")) return;
 
     const notesArray = currentNotes.split("\n\n");
     notesArray.splice(noteIndex, 1);
     const newNotesString = notesArray.join("\n\n");
 
-    await handleUpdateNotes(formId, newNotesString);
+    await handleUpdateNotes(consultationId, newNotesString);
   };
 
   const saveEditedNote = async () => {
     if (!editingNote) return;
-    const { formId, index, text } = editingNote;
+    const { consultationId, index, text } = editingNote;
 
-    const form = forms.find(f => f._id === formId);
-    if (!form || !form.notes) return;
+    const consultation = consultations.find(c => c._id === consultationId);
+    if (!consultation || !consultation.notes) return;
 
-    const notesArray = form.notes.split("\n\n");
+    const notesArray = consultation.notes.split("\n\n");
     notesArray[index] = text;
     const newNotesString = notesArray.join("\n\n");
 
-    const success = await handleUpdateNotes(formId, newNotesString);
+    const success = await handleUpdateNotes(consultationId, newNotesString);
     if (success) setEditingNote(null);
   };
 
@@ -132,10 +132,10 @@ const AvaniFormsPage = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              Contact Submissions
+              Consultation Requests
             </h1>
             <p className="text-gray-500 mt-1 text-sm md:text-base">
-              Manage all contact form submissions from the website.
+              Manage and track all consultation form submissions.
             </p>
           </div>
         </div>
@@ -145,9 +145,9 @@ const AvaniFormsPage = () => {
           <div className="flex items-center justify-between p-4 rounded-2xl bg-white/90 border border-gray-100 shadow-sm">
             <div className="text-left">
               <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                Total Submissions
+                Total Requests
               </h3>
-              <p className="text-2xl font-bold text-gray-900 mt-2">{forms.length}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-2">{consultations.length}</p>
             </div>
             <MessageSquare size={24} className="text-indigo-500" />
           </div>
@@ -158,8 +158,8 @@ const AvaniFormsPage = () => {
                 This Month
               </h3>
               <p className="text-2xl font-bold text-gray-900 mt-2">
-                {forms.filter(f => {
-                  const date = new Date(f.createdAt);
+                {consultations.filter(c => {
+                  const date = new Date(c.createdAt);
                   const now = new Date();
                   return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
                 }).length}
@@ -174,8 +174,8 @@ const AvaniFormsPage = () => {
                 Today
               </h3>
               <p className="text-2xl font-bold text-gray-900 mt-2">
-                {forms.filter(f => {
-                  const date = new Date(f.createdAt);
+                {consultations.filter(c => {
+                  const date = new Date(c.createdAt);
                   const now = new Date();
                   return date.toDateString() === now.toDateString();
                 }).length}
@@ -200,69 +200,70 @@ const AvaniFormsPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm">
-              {forms.length === 0 ? (
+
+              {consultations.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="px-6 py-12 text-center text-gray-500 text-sm">
-                    🌤️ No contact submissions yet
+                    🌤️ No consultation requests yet
                   </td>
                 </tr>
               ) : (
-                forms.map((form, idx) => (
-                  <Fragment key={form._id}>
+                consultations.map((consultation, idx) => (
+                  <Fragment key={consultation._id}>
                     <tr
                       className={clsx(
                         "transition-colors",
                         idx % 2 === 0 ? "bg-white" : "bg-slate-50/40",
                         "hover:bg-indigo-50/40",
-                        expandedRow === form._id && "bg-indigo-50/60"
+                        expandedRow === consultation._id && "bg-indigo-50/60"
                       )}
                     >
                       <td className="px-6 py-4">
                         <div className="font-medium text-gray-900">
-                          {form.fullName || "N/A"}
+                          {consultation.fullName || "N/A"}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-0.5">
                           <span className="text-sm text-gray-900">
-                            {form.email}
+                            {consultation.email}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {form.phoneNu}
+                            {consultation.phoneNu}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <span className="text-sm text-gray-700">
-                          {form.companyName || "—"}
+                          {consultation.companyName || "—"}
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        {form.service ? (
+                        {consultation.service ? (
                           <span className="px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-100">
-                            {form.service.length > 20 ? form.service.substring(0, 20) + '...' : form.service}
+                            {consultation.service.length > 20 ? consultation.service.substring(0, 20) + '...' : consultation.service}
                           </span>
                         ) : (
                           <span className="text-gray-500 text-sm">—</span>
                         )}
                       </td>
-
                       <td className="px-6 py-4">
                         <button
-                          onClick={() => toggleNotes(form._id)}
+                          onClick={() => toggleNotes(consultation._id)}
                           className="p-2 rounded-lg hover:bg-indigo-100 text-indigo-500 transition-colors relative group"
-                          title={form.notes ? form.notes.split("\n\n").pop() : "No notes yet"}
+                          title={consultation.notes ? consultation.notes.split("\n\n").pop() : "No notes yet"}
                         >
                           <MessageSquare size={18} />
-                          {form.notes && (
+                          {consultation.notes && (
                             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-400 border border-white" />
                           )}
                         </button>
                       </td>
+
                       <td className="px-6 py-4 text-sm text-gray-600">
-                        {new Date(form.createdAt).toLocaleDateString()}
+                        {new Date(consultation.createdAt).toLocaleDateString()}
                         <div className="text-xs text-gray-400">
-                          {new Date(form.createdAt).toLocaleTimeString([], {
+                          {new Date(consultation.createdAt).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
@@ -270,7 +271,7 @@ const AvaniFormsPage = () => {
                       </td>
                       <td className="px-6 py-4">
                         <button
-                          onClick={() => openModal(form)}
+                          onClick={() => openModal(consultation)}
                           className="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-lg hover:bg-indigo-100 transition-colors"
                         >
                           <Eye className="w-4 h-4 mr-1" />
@@ -280,7 +281,7 @@ const AvaniFormsPage = () => {
                     </tr>
 
                     {/* Expanded Notes Panel */}
-                    {expandedRow === form._id && (
+                    {expandedRow === consultation._id && (
                       <tr>
                         <td colSpan={7} className="px-0">
                           <div className="bg-indigo-50/30 p-4 border-b border-indigo-100 shadow-inner animate-in slide-in-from-top-2 duration-200">
@@ -302,10 +303,11 @@ const AvaniFormsPage = () => {
                               </div>
 
                               <div className="bg-white rounded-xl border border-indigo-100 p-4 mb-3 max-h-60 overflow-y-auto custom-scrollbar shadow-sm space-y-3">
-                                {form.notes ? (
-                                  form.notes.split("\n\n").map((noteBlock, nIdx) => (
+                                {consultation.notes ? (
+                                  consultation.notes.split("\n\n").map((noteBlock, nIdx) => (
                                     <div key={nIdx} className="p-3 bg-gray-50 rounded-lg border border-gray-100 relative group hover:bg-white hover:shadow-sm transition-all">
-                                      {editingNote?.formId === form._id && editingNote?.index === nIdx ? (
+
+                                      {editingNote?.consultationId === consultation._id && editingNote?.index === nIdx ? (
                                         <div className="space-y-2">
                                           <textarea
                                             value={editingNote.text}
@@ -335,14 +337,14 @@ const AvaniFormsPage = () => {
                                           </p>
                                           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity bg-white/80 p-1 rounded-md shadow-sm">
                                             <button
-                                              onClick={() => setEditingNote({ formId: form._id, index: nIdx, text: noteBlock })}
+                                              onClick={() => setEditingNote({ consultationId: consultation._id, index: nIdx, text: noteBlock })}
                                               className="p-1 hover:bg-indigo-50 text-gray-400 hover:text-indigo-600 rounded"
                                               title="Edit Note"
                                             >
                                               <Edit2 size={12} />
                                             </button>
                                             <button
-                                              onClick={() => handleDeleteNote(form._id, nIdx, form.notes)}
+                                              onClick={() => handleDeleteNote(consultation._id, nIdx, consultation.notes)}
                                               className="p-1 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded"
                                               title="Delete Note"
                                             >
@@ -369,7 +371,7 @@ const AvaniFormsPage = () => {
                                   rows={2}
                                 />
                                 <button
-                                  onClick={() => handleAddNote(form._id, form.notes)}
+                                  onClick={() => handleAddNote(consultation._id, consultation.notes)}
                                   className="bg-indigo-600 text-white px-4 py-3 rounded-xl font-medium hover:bg-indigo-700 transition-colors flex items-center gap-2 shadow-md shadow-indigo-200 active:scale-95"
                                 >
                                   Add <Send size={14} />
@@ -389,34 +391,34 @@ const AvaniFormsPage = () => {
 
         {/* Mobile Card View */}
         <div className="md:hidden space-y-4">
-          {forms.map((form) => (
+          {consultations.map((consultation) => (
             <div
-              key={form._id}
+              key={consultation._id}
               className="bg-white/90 backdrop-blur-xl p-4 rounded-2xl border border-gray-100 shadow-sm space-y-3"
             >
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="font-semibold text-gray-900">
-                    {form.fullName || "N/A"}
+                    {consultation.fullName || "N/A"}
                   </h3>
                   <p className="text-xs text-gray-500">
-                    {new Date(form.createdAt).toLocaleString()}
+                    {new Date(consultation.createdAt).toLocaleString()}
                   </p>
                 </div>
               </div>
 
               <div className="space-y-1">
                 <p className="text-xs text-gray-500 font-medium">Contact</p>
-                <p className="text-sm text-gray-700">{form.email}</p>
-                <p className="text-sm text-gray-700">{form.phoneNu}</p>
-                <p className="text-sm text-gray-700">{form.companyName || "—"}</p>
+                <p className="text-sm text-gray-700">{consultation.email}</p>
+                <p className="text-sm text-gray-700">{consultation.phoneNu}</p>
+                <p className="text-sm text-gray-700">{consultation.companyName || "—"}</p>
               </div>
 
               <div>
                 <p className="text-xs text-gray-500 font-medium mb-1">Service</p>
-                {form.service ? (
+                {consultation.service ? (
                   <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-100">
-                    {form.service}
+                    {consultation.service}
                   </span>
                 ) : (
                   <span className="text-sm text-gray-700">—</span>
@@ -426,23 +428,23 @@ const AvaniFormsPage = () => {
               {/* Collapsible Notes Section */}
               <div>
                 <button
-                  onClick={() => toggleNotes(form._id)}
+                  onClick={() => toggleNotes(consultation._id)}
                   className="w-full flex justify-between items-center p-3 bg-indigo-50/50 rounded-xl text-xs font-semibold text-indigo-700 hover:bg-indigo-100/50 transition-colors mb-2"
                 >
                   <span className="flex items-center gap-2">
                     <StickyNote size={14} />
-                    Notes & History {form.notes ? <span className="bg-white text-indigo-600 px-1.5 py-0.5 rounded-full text-[10px] shadow-sm ml-1">{form.notes.split('\n\n').length}</span> : ''}
+                    Notes & History {consultation.notes ? <span className="bg-white text-indigo-600 px-1.5 py-0.5 rounded-full text-[10px] shadow-sm ml-1">{consultation.notes.split('\n\n').length}</span> : ''}
                   </span>
-                  {expandedRow === form._id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  {expandedRow === consultation._id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                 </button>
 
-                {expandedRow === form._id && (
+                {expandedRow === consultation._id && (
                   <div className="animate-in slide-in-from-top-2 duration-300">
                     <div className="bg-white rounded-xl border border-gray-100 p-3 max-h-64 overflow-y-auto custom-scrollbar shadow-sm space-y-3 mb-3">
-                      {form.notes ? (
-                        form.notes.split("\n\n").map((noteBlock, nIdx) => (
+                      {consultation.notes ? (
+                        consultation.notes.split("\n\n").map((noteBlock, nIdx) => (
                           <div key={nIdx} className="p-3 bg-gray-50/50 rounded-lg border border-gray-100 relative group shadow-sm transition-all">
-                            {editingNote?.formId === form._id && editingNote?.index === nIdx ? (
+                            {editingNote?.consultationId === consultation._id && editingNote?.index === nIdx ? (
                               <div className="space-y-2">
                                 <textarea
                                   value={editingNote.text}
@@ -457,6 +459,7 @@ const AvaniFormsPage = () => {
                                   >
                                     Cancel
                                   </button>
+
                                   <button
                                     onClick={saveEditedNote}
                                     className="flex items-center gap-1 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-md hover:bg-indigo-700"
@@ -472,14 +475,13 @@ const AvaniFormsPage = () => {
                                 </p>
                                 <div className="flex justify-end gap-3 mt-2.5 pt-2 border-t border-gray-100">
                                   <button
-                                    onClick={() => setEditingNote({ formId: form._id, index: nIdx, text: noteBlock })}
+                                    onClick={() => setEditingNote({ consultationId: consultation._id, index: nIdx, text: noteBlock })}
                                     className="text-indigo-500 hover:text-indigo-700 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide"
                                   >
                                     <Edit2 size={10} /> Edit
                                   </button>
-
                                   <button
-                                    onClick={() => handleDeleteNote(form._id, nIdx, form.notes)}
+                                    onClick={() => handleDeleteNote(consultation._id, nIdx, consultation.notes)}
                                     className="text-red-400 hover:text-red-600 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide"
                                   >
                                     <Trash2 size={10} /> Delete
@@ -506,7 +508,7 @@ const AvaniFormsPage = () => {
                         rows={1}
                       />
                       <button
-                        onClick={() => handleAddNote(form._id, form.notes)}
+                        onClick={() => handleAddNote(consultation._id, consultation.notes)}
                         className="bg-indigo-600 text-white p-3 rounded-xl font-medium hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200 active:scale-95"
                       >
                         <Send size={16} />
@@ -518,7 +520,7 @@ const AvaniFormsPage = () => {
 
               <div className="pt-2">
                 <button
-                  onClick={() => openModal(form)}
+                  onClick={() => openModal(consultation)}
                   className="w-full inline-flex items-center justify-center px-4 py-2 bg-indigo-50 text-indigo-600 text-sm font-medium rounded-lg hover:bg-indigo-100 transition-colors"
                 >
                   <Eye className="w-4 h-4 mr-2" />
@@ -528,20 +530,20 @@ const AvaniFormsPage = () => {
             </div>
           ))}
 
-          {forms.length === 0 && (
+          {consultations.length === 0 && (
             <div className="text-center text-gray-500 py-10 bg-white/80 border border-gray-100 rounded-2xl text-sm">
-              No contact submissions yet.
+              No consultation requests yet.
             </div>
           )}
         </div>
       </div>
 
       {/* Modal */}
-      {showModal && selectedForm && (
+      {showModal && selectedConsultation && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Contact Details</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Consultation Details</h2>
               <button
                 onClick={closeModal}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -559,19 +561,20 @@ const AvaniFormsPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Full Name</p>
-                    <p className="text-sm font-medium text-gray-900">{selectedForm.fullName || "N/A"}</p>
+                    <p className="text-sm font-medium text-gray-900">{selectedConsultation.fullName || "N/A"}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Email</p>
-                    <p className="text-sm font-medium text-gray-900">{selectedForm.email || "N/A"}</p>
+                    <p className="text-sm font-medium text-gray-900">{selectedConsultation.email || "N/A"}</p>
                   </div>
+
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Phone</p>
-                    <p className="text-sm font-medium text-gray-900">{selectedForm.phoneNu || "N/A"}</p>
+                    <p className="text-sm font-medium text-gray-900">{selectedConsultation.phoneNu || "N/A"}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Company</p>
-                    <p className="text-sm font-medium text-gray-900">{selectedForm.companyName || "N/A"}</p>
+                    <p className="text-sm font-medium text-gray-900">{selectedConsultation.companyName || "N/A"}</p>
                   </div>
                 </div>
               </div>
@@ -583,23 +586,23 @@ const AvaniFormsPage = () => {
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Requested Service</p>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                      {selectedForm.service || "N/A"}
+                      {selectedConsultation.service || "N/A"}
                     </span>
                   </div>
-                  {selectedForm.otherService && (
+                  {selectedConsultation.otherService && (
                     <div>
                       <p className="text-xs text-gray-500 mb-1">Other Service Details</p>
-                      <p className="text-sm font-medium text-gray-900">{selectedForm.otherService}</p>
+                      <p className="text-sm font-medium text-gray-900">{selectedConsultation.otherService}</p>
                     </div>
                   )}
                 </div>
               </div>
 
               {/* Project Details */}
-              {selectedForm.projectDetails && (
+              {selectedConsultation.projectDetails && (
                 <div className="bg-green-50 rounded-xl p-4">
                   <h3 className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-4">Project Details</h3>
-                  <p className="text-sm text-gray-900 whitespace-pre-wrap">{selectedForm.projectDetails}</p>
+                  <p className="text-sm text-gray-900 whitespace-pre-wrap">{selectedConsultation.projectDetails}</p>
                 </div>
               )}
 
@@ -610,12 +613,12 @@ const AvaniFormsPage = () => {
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Submitted On</p>
                     <p className="text-sm font-medium text-gray-900">
-                      {new Date(selectedForm.createdAt).toLocaleString()}
+                      {new Date(selectedConsultation.createdAt).toLocaleString()}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Request ID</p>
-                    <p className="text-sm font-medium text-gray-900 font-mono">{selectedForm._id}</p>
+                    <p className="text-sm font-medium text-gray-900 font-mono">{selectedConsultation._id}</p>
                   </div>
                 </div>
               </div>
@@ -629,7 +632,7 @@ const AvaniFormsPage = () => {
                 Close
               </button>
               <a
-                href={`mailto:${selectedForm.email}`}
+                href={`mailto:${selectedConsultation.email}`}
                 className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
               >
                 Send Email
@@ -642,4 +645,4 @@ const AvaniFormsPage = () => {
   );
 };
 
-export default AvaniFormsPage;
+export default Consultations;

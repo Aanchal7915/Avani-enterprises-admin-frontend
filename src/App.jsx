@@ -8,6 +8,7 @@ import ContactedLeads from "./pages/ContactedLeads";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import AvaniFormDetail from "./pages/AvaniFormDetail";
 import AvaniFormsPage from "./pages/AvaniFormsPage";
+import Consultations from "./pages/Consultations";
 import JobManagement from "./pages/JobManagement";
 import ApplicationManagement from "./pages/ApplicationManagement";
 import JobAnalytics from "./pages/JobAnalytics";
@@ -93,6 +94,7 @@ function App() {
             <Route path="analytics" element={<AnalyticsDashboard />} />
             <Route path="avani-forms/:id" element={<AvaniFormDetail />} />
             <Route path="avani-forms" element={<AvaniFormsPage />} />
+            <Route path="consultations" element={<Consultations />} />
             <Route path="seo" element={<SeoManager />} />
             <Route path="blogs" element={<BlogManagement />} />
             <Route path="jobs-dashboard" element={<JobsDashboard />} />

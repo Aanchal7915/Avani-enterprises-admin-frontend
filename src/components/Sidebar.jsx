@@ -69,6 +69,7 @@ const Sidebar = () => {
                             <NavItem to="/seo" icon={FileText} label="SEO Manager" />
                             <NavItem to="/" icon={LayoutDashboard} label="Leads Dashboard" />
                             <NavItem to="/avani-forms" icon={MessageSquare} label="Contact Submissions" />
+                            <NavItem to="/consultations" icon={User} label="Consultations" />
                         </div>
 
                         <div className="mb-4">

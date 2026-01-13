@@ -62,7 +62,8 @@ const Dashboard = () => {
     try {
       console.log("🔍 Fetching leads with token:", token ? "Token exists" : "No token");
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/leads`);
-      const data = res.data || [];
+      // Handle different response formats
+      const data = Array.isArray(res.data) ? res.data : (res.data.data || res.data.leads || []);
       setLeads(data);
 
       const initialStatuses = {};
