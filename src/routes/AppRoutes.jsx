@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import ContactedLeads from "../pages/ContactedLeads";
 import AnalyticsDashboard from "../pages/AnalyticsDashboard";
+import SeoManager from "../pages/SeoManager";
 
 const AppRoutes = () => (
   <BrowserRouter>
@@ -22,6 +23,7 @@ const AppRoutes = () => (
 
       {/* Analytics dashboard */}
       <Route path="/analytics" element={<AnalyticsDashboard />} />
+  <Route path="/seo" element={<SeoManager />} />
     </Routes>
   </BrowserRouter>
 );

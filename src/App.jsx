@@ -12,6 +12,8 @@ import JobManagement from "./pages/JobManagement";
 import ApplicationManagement from "./pages/ApplicationManagement";
 import JobAnalytics from "./pages/JobAnalytics";
 import JobsDashboard from "./pages/JobsDashboard";
+import SeoManager from "./pages/SeoManager";
+import AdminLayout from "./AdminLayout";
 import { Loader2 } from "lucide-react";
 
 
@@ -76,51 +78,26 @@ function App() {
             }
           />
 
-          {/* Protected App Routes */}
+          {/* Protected App Routes (nested under AdminLayout so Sidebar persists) */}
           <Route
             path="/"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <AdminLayout />
               </ProtectedRoute>
             }
-          />
-
-          <Route
-            path="/contacted-leads"
-            element={
-              <ProtectedRoute>
-                <ContactedLeads />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/analytics"
-            element={
-              <ProtectedRoute>
-                <AnalyticsDashboard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/avani-forms/:id"
-            element={
-              <ProtectedRoute>
-                <AvaniFormDetail />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/avani-forms"
-            element={
-              <ProtectedRoute>
-                <AvaniFormsPage />
-              </ProtectedRoute>
-            }
-          />
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="contacted-leads" element={<ContactedLeads />} />
+            <Route path="analytics" element={<AnalyticsDashboard />} />
+            <Route path="avani-forms/:id" element={<AvaniFormDetail />} />
+            <Route path="avani-forms" element={<AvaniFormsPage />} />
+            <Route path="seo" element={<SeoManager />} />
+            <Route path="jobs-dashboard" element={<JobsDashboard />} />
+            <Route path="jobs" element={<JobManagement />} />
+            <Route path="applications" element={<ApplicationManagement />} />
+            <Route path="job-analytics" element={<JobAnalytics />} />
+          </Route>
 
           {/* Job Management Routes */}
           <Route

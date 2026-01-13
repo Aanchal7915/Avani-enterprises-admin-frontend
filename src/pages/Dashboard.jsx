@@ -28,6 +28,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AdvancedFilter from "../components/AdvancedFilter";
 import { filterLeads } from "../utils/filterLogic";
+import SeoManager from "./SeoManager";
 
 const Dashboard = () => {
   const [leads, setLeads] = useState([]);
@@ -356,6 +357,8 @@ const Dashboard = () => {
               .
             </div>
           </div>
+
+          {/* ...existing content continues */}
 
           {/* Content */}
           {loading ? (
