@@ -77,19 +77,7 @@ const Sidebar = () => {
                             <NavItem to="/applications" icon={FileText} label="Applications" />
                         </div>
 
-                        <div>
-                            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Public Pages</p>
-                            <a
-                                href="/careers"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors mb-1 text-gray-600 hover:bg-gray-100"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <Briefcase size={20} />
-                                <span className="font-medium">View Career Page</span>
-                            </a>
-                        </div>
+
                     </nav>
 
                     {/* User & Logout */}

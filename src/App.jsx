@@ -12,8 +12,6 @@ import JobManagement from "./pages/JobManagement";
 import ApplicationManagement from "./pages/ApplicationManagement";
 import JobAnalytics from "./pages/JobAnalytics";
 import JobsDashboard from "./pages/JobsDashboard";
-import CareerPage from "./pages/CareerPage";
-import JobDetail from "./pages/JobDetail";
 import { Loader2 } from "lucide-react";
 
 
@@ -77,10 +75,6 @@ function App() {
               </PublicRoute>
             }
           />
-
-          {/* Public Career Pages */}
-          <Route path="/careers" element={<CareerPage />} />
-          <Route path="/careers/:id" element={<JobDetail />} />
 
           {/* Protected App Routes */}
           <Route
