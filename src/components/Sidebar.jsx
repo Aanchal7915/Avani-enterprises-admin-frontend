@@ -72,6 +72,11 @@ const Sidebar = () => {
                         </div>
 
                         <div className="mb-4">
+                            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Content</p>
+                            <NavItem to="/blogs" icon={FileText} label="Blog Management" />
+                        </div>
+
+                        <div className="mb-4">
                             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Careers</p>
                             <NavItem to="/jobs-dashboard" icon={BarChart3} label="Jobs Dashboard" />
                             <NavItem to="/jobs" icon={Briefcase} label="Job Management" />

@@ -13,6 +13,7 @@ import ApplicationManagement from "./pages/ApplicationManagement";
 import JobAnalytics from "./pages/JobAnalytics";
 import JobsDashboard from "./pages/JobsDashboard";
 import SeoManager from "./pages/SeoManager";
+import BlogManagement from "./pages/BlogManagement";
 import AdminLayout from "./AdminLayout";
 import { Loader2 } from "lucide-react";
 
@@ -93,6 +94,7 @@ function App() {
             <Route path="avani-forms/:id" element={<AvaniFormDetail />} />
             <Route path="avani-forms" element={<AvaniFormsPage />} />
             <Route path="seo" element={<SeoManager />} />
+            <Route path="blogs" element={<BlogManagement />} />
             <Route path="jobs-dashboard" element={<JobsDashboard />} />
             <Route path="jobs" element={<JobManagement />} />
             <Route path="applications" element={<ApplicationManagement />} />
