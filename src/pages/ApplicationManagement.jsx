@@ -160,11 +160,8 @@ const ApplicationManagement = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-pink-50">
-      <Sidebar />
-
-      <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-x-hidden mt-16 md:mt-0">
-        <div className="max-w-7xl mx-auto space-y-6 pt-8 md:pt-4">
+    <>
+      <div className="max-w-7xl mx-auto space-y-6 pt-8 md:pt-4">
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
@@ -361,10 +358,9 @@ const ApplicationManagement = () => {
               </div>
             </div>
           )}
-        </div>
-      </main>
+  </div>
 
-      {/* View Application Modal */}
+  {/* View Application Modal */}
       {viewingApp && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto my-8">
@@ -651,7 +647,7 @@ const ApplicationManagement = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

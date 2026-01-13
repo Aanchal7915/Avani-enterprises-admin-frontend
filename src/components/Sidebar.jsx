@@ -53,10 +53,6 @@ const Sidebar = () => {
                 "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out md:translate-x-0 overflow-y-auto",
                 isOpen ? "translate-x-0" : "-translate-x-full"
             )}>
-                               <div className="mb-4">
-                                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Website</p>
-                                   <NavItem to="/seo" icon={FileText} label="SEO Manager" />
-                               </div>
                 <div className="flex flex-col h-full">
 
                     {/* Header */}

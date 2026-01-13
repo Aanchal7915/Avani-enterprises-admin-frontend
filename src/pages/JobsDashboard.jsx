@@ -124,11 +124,8 @@ const JobsDashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-pink-50">
-      <Sidebar />
-
-      <main className="flex-1 md:ml-64 p-4 md:p-8 overflow-x-hidden mt-16 md:mt-0">
-        <div className="max-w-6xl mx-auto space-y-6 pt-8 md:pt-4">
+    <>
+      <div className="max-w-6xl mx-auto space-y-6 pt-8 md:pt-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
@@ -534,9 +531,8 @@ const JobsDashboard = () => {
               </div>
             </>
           )}
-        </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 };
 

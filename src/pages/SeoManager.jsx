@@ -53,8 +53,8 @@ export default function SeoManager() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+    <div className="max-w-6xl mx-auto space-y-6 pt-8 md:pt-4">
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <h3 className="text-lg font-semibold mb-3">{editingId ? 'Edit SEO Entry' : 'Create SEO Entry'}</h3>
         <form onSubmit={submit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="col-span-1 md:col-span-1">
@@ -99,9 +99,9 @@ export default function SeoManager() {
             <button type="button" onClick={()=>{setForm({ page: "", section: "", title: "", seoHeading: "", metaDescription: "", metaKeywords: "" }); setEditingId(null);}} className="px-3 py-2 border rounded-lg">Reset</button>
           </div>
         </form>
-      </div>
+  </div>
 
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+  <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold">Existing SEO Entries</h3>
           <div className="text-sm text-gray-500">Total: <span className="font-medium text-gray-700">{entries.length}</span></div>
@@ -128,5 +128,5 @@ export default function SeoManager() {
         </div>
       </div>
     </div>
-  )
+  );
 }
