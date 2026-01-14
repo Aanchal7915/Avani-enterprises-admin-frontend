@@ -292,7 +292,7 @@ export default function SeoManager() {
                         </div>
                       </td>
                       <td className="px-6 py-5 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-end gap-2 transition-opacity">
                           <button
                             onClick={() => edit(en)}
                             className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
