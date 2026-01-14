@@ -66,7 +66,6 @@ const Sidebar = () => {
                     <nav className="flex-1 px-4 py-6">
                         <div className="mb-4">
                             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Leads</p>
-                            <NavItem to="/seo" icon={FileText} label="SEO Manager" />
                             <NavItem to="/" icon={LayoutDashboard} label="Leads Dashboard" />
                             <NavItem to="/avani-forms" icon={MessageSquare} label="Contact Submissions" />
                             <NavItem to="/consultations" icon={User} label="Consultations" />
@@ -75,6 +74,7 @@ const Sidebar = () => {
                         <div className="mb-4">
                             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Content</p>
                             <NavItem to="/blogs" icon={FileText} label="Blog Management" />
+                            <NavItem to="/seo" icon={FileText} label="SEO Manager" />
                         </div>
 
                         <div className="mb-4">
