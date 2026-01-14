@@ -78,7 +78,7 @@ const BlogManagement = () => {
         </div>
         <button
           onClick={openCreate}
-          className="bg-indigo-600 text-white px-5 py-1.5 md:px-4 md:py-2 rounded-lg text-[11px] md:text-sm font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-100 transition-all hover:bg-indigo-700 active:scale-95"
+          className="bg-indigo-600 text-white px-5 py-1.5 md:px-4 md:py-2 rounded-lg text-[11px] md:text-sm font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-100 transition-all hover:bg-indigo-700 active:scale-95 whitespace-nowrap shrink-0"
         >
           <Plus size={14} className="md:w-4 md:h-4" />
           <span>New Post</span>

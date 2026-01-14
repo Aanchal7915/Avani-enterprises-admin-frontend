@@ -120,17 +120,28 @@ export default function SeoManager() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Form Column */}
+        {/* Form Modal/Section */}
         {isFormOpen && (
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 transition-all duration-300">
-              <div className="flex items-center justify-between mb-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 overflow-y-auto">
+            <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl max-w-2xl w-full my-auto transition-all duration-300 relative">
+              <button
+                onClick={() => {
+                  setIsFormOpen(false);
+                  setEditingId(null);
+                  setForm({ page: "", section: "", title: "", seoHeading: "", metaDescription: "", metaKeywords: "" });
+                }}
+                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="flex items-center justify-between mb-6 pr-8">
                 <h3 className="text-xl font-bold text-gray-900">{editingId ? 'Edit Configuration' : 'New Configuration'}</h3>
                 <span className="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full animate-pulse">Live Preview</span>
               </div>
 
               <form onSubmit={submit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="col-span-1">
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Target Page</label>
                     <input
@@ -223,10 +234,11 @@ export default function SeoManager() {
                     onClick={() => {
                       setForm({ page: "", section: "", title: "", seoHeading: "", metaDescription: "", metaKeywords: "" });
                       setEditingId(null);
+                      setIsFormOpen(false);
                     }}
-                    className="px-6 py-3 border border-gray-200 text-gray-600 rounded-xl font-semibold hover:bg-gray-50 transition-all"
+                    className="flex-1 px-6 py-3 border border-gray-200 text-gray-600 rounded-xl font-semibold hover:bg-gray-50 transition-all font-bold"
                   >
-                    Reset
+                    Cancel
                   </button>
                 </div>
               </form>
