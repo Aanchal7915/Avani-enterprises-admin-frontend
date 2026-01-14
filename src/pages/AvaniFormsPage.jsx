@@ -193,7 +193,7 @@ const AvaniFormsPage = () => {
                 <th className="px-6 py-3.5">Name</th>
                 <th className="px-6 py-3.5">Contact</th>
                 <th className="px-6 py-3.5">Company</th>
-                <th className="px-6 py-3.5">Service</th>
+                <th className="px-6 py-3.5">Services</th>
                 <th className="px-6 py-3.5">Notes</th>
                 <th className="px-6 py-3.5">Date</th>
                 <th className="px-6 py-3.5">Action</th>
@@ -238,13 +238,23 @@ const AvaniFormsPage = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        {form.service ? (
-                          <span className="px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-100">
-                            {form.service.length > 20 ? form.service.substring(0, 20) + '...' : form.service}
-                          </span>
-                        ) : (
-                          <span className="text-gray-500 text-sm">—</span>
-                        )}
+                        <div className="flex flex-wrap gap-1.5">
+                          {Array.isArray(form.services) &&
+                            form.services.length > 0 ? (
+                            form.services.map((s, idx2) => (
+                              <span
+                                key={idx2}
+                                className="px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-100"
+                              >
+                                {s}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-gray-500 text-sm">
+                              {form.service || "—"}
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       <td className="px-6 py-4">
@@ -413,14 +423,24 @@ const AvaniFormsPage = () => {
               </div>
 
               <div>
-                <p className="text-xs text-gray-500 font-medium mb-1">Service</p>
-                {form.service ? (
-                  <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-100">
-                    {form.service}
-                  </span>
-                ) : (
-                  <span className="text-sm text-gray-700">—</span>
-                )}
+                <p className="text-xs text-gray-500 font-medium mb-1">Services</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {Array.isArray(form.services) &&
+                    form.services.length > 0 ? (
+                    form.services.map((s, idx2) => (
+                      <span
+                        key={idx2}
+                        className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-100"
+                      >
+                        {s}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-sm text-gray-700">
+                      {form.service || "—"}
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Collapsible Notes Section */}
