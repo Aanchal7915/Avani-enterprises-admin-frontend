@@ -89,32 +89,32 @@ export default function SeoManager() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-          <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
-            <Globe size={24} />
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 sm:gap-4 overflow-hidden">
+          <div className="p-2 sm:p-3 bg-blue-50 text-blue-600 rounded-xl shrink-0">
+            <Globe size={20} className="sm:w-6 sm:h-6" />
           </div>
-          <div>
-            <p className="text-sm text-gray-500 font-medium">Indexed Pages</p>
-            <p className="text-2xl font-bold text-gray-900">{entries.length}</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-          <div className="p-3 bg-green-50 text-green-600 rounded-xl">
-            <CheckCircle size={24} />
-          </div>
-          <div>
-            <p className="text-sm text-gray-500 font-medium">Fully Optimized</p>
-            <p className="text-2xl font-bold text-gray-900">{entries.filter(e => e.title && e.metaDescription).length}</p>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-sm text-gray-500 font-medium truncate uppercase">Indexed</p>
+            <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{entries.length}</p>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
-          <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
-            <Info size={24} />
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3 sm:gap-4 overflow-hidden">
+          <div className="p-2 sm:p-3 bg-green-50 text-green-600 rounded-xl shrink-0">
+            <CheckCircle size={20} className="sm:w-6 sm:h-6" />
           </div>
-          <div>
-            <p className="text-sm text-gray-500 font-medium">Pending Review</p>
-            <p className="text-2xl font-bold text-gray-900">{entries.filter(e => !e.metaDescription).length}</p>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-sm text-gray-500 font-medium truncate uppercase">Optimized</p>
+            <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{entries.filter(e => e.title && e.metaDescription).length}</p>
+          </div>
+        </div>
+        <div className="col-span-2 md:col-span-1 bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center md:justify-start gap-3 sm:gap-4 overflow-hidden">
+          <div className="p-2 sm:p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0">
+            <Info size={20} className="sm:w-6 sm:h-6" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-sm text-gray-500 font-medium truncate uppercase text-center md:text-left">Pending Review</p>
+            <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate text-center md:text-left">{entries.filter(e => !e.metaDescription).length}</p>
           </div>
         </div>
       </div>
